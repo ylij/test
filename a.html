@@ -1,0 +1,114 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="user-scalable=no,width=device-width, height=device-height,initial-scale=1.0">
+<style>
+  body{
+    background:#000;
+	color:#fff;
+	font-size:30px;
+	text-align:center;
+	display:flex;
+  }
+  
+  #keys{
+    display:flex;
+	flex-wrap:wrap;
+	width:248px;
+	margin:auto;
+  }
+  
+  #keys>button{
+    outline:none;
+	border:none;
+	background:#fff;
+	width:50px;
+	height:50px;
+	font-size:inherit;
+	border-radius:50%;
+	margin:6px
+  }
+  
+  #keys>button:hover{
+    background:#26f;
+	color:#fff
+  }
+  
+  #d2 input{
+    font-size:inherit;
+	outline:none;
+	border:none;
+	width:1em;
+	height:1em;
+	color:#fff;
+	background:transparent;
+	border-bottom:2px solid #fff;
+	margin:0 .5em;
+	text-align:center
+  }
+  
+  body>div{margin:auto}
+  
+  body>div>div{margin:10px}
+  
+  p{font-size:16px}
+</style>
+<body>
+  <div>
+	<p>这个数对应的乘法算式是？</p>
+    <div id="d1"></div>
+    <div id="d2">
+	</div>
+    <div id="keys">
+	  <button>1</button><button>2</button><button>3</button><button>←</button>
+	  <button>4</button><button>5</button><button>6</button><button>√</button>
+	  <button>7</button><button>8</button><button>9</button><button>0</button>
+    </div>
+  </div>
+  <script>
+    o={},num=[];
+    for(var i=2;i<10;i++){
+	  for(var j=2,n=0,s="";j<=i;j++){
+	    n=j*i;
+		if(!num.includes(n))num.push(n);
+		o[n]?o[n]++:o[n]=1;
+	  }
+	}
+	
+	f=()=>{
+	  n=Math.floor((Math.random()*num.length)),
+	  d1.innerHTML=num[n];
+	  let s="<input type='number' disabled>";
+	  d2.innerHTML=s+"×"+s;
+	  if(o[num[n]]>1)d2.innerHTML+="<br>"+d2.innerHTML;
+	  num.splice(n,1);
+	  inp=[],p=-1;
+	  for(var i=0;i<d2.children.length;i++)
+	    if(i!=2)inp.push(d2.children[i]);
+	}
+	
+	c=keys.children;
+	for(var i=0;i<c.length;i++){
+	  if(i!=3 && i!=7){
+	    c[i].onclick=function(){
+		  if(p<inp.length-1)p++;
+		  inp[p].value=this.innerHTML;
+	    };
+	  }
+	}
+	
+	c[3].onclick=()=>{
+	  inp[p].value='';
+	  if(p>-1)p--;
+	};
+	
+	c[7].onclick=()=>{
+	  let b=inp[0].value*inp[1].value==d1.innerHTML;
+	  if(b&&inp.length>2)
+	    b=inp[2].value*inp[3].value==d1.innerHTML;
+	  if(b){
+	    d2.innerHTML="",inp=[];
+		f();
+	  }
+	};
+	f();
+  </script>
+</body>
